@@ -1,5 +1,5 @@
 // Models
-const User = require('../User/user')
+const User = require('../models/User/user')
 
 // Returning format (err, data)
 const canCreateAccount = async (data) => {
@@ -22,5 +22,36 @@ const canCreateAccount = async (data) => {
     return { err: null, data }
 }
 
+const canLogin = async (data) => {
 
-module.exports = { canCreateAccount }
+    if (!data.username) {
+        return { err: {
+            "message": "Username required.",
+        }, data }
+    }
+
+    if (!data.password) {
+        return { err: {
+            "message": "Password required.",
+        }, data }
+    }
+
+    return { err: null, data }
+}
+
+const verifyToken = (req, res, next) => {
+    const bearerHeader = req.headers["authorization"]
+    if (bearerHeader) {
+        const bearerToken = bearerHeader.split(" ")[1]
+        req.token = bearerToken
+        next()
+    } else {
+        res.sendStatus(403) // Forbidden
+    }
+}
+
+module.exports = {
+    canCreateAccount,
+    canLogin,
+    verifyToken
+}

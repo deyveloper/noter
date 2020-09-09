@@ -16,7 +16,7 @@ mongoose.connect(connectionString, {
 })
 
 // Models
-const User = require('./User/user')
+const User = require('./models/User/user')
 
 // App config
 const app = express()
